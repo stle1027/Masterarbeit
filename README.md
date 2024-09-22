@@ -1,25 +1,13 @@
-# Detect Every Thing with Few Examples
-
-[Arxiv Paper](https://arxiv.org/abs/2309.12969)
-
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/detect-every-thing-with-few-examples/open-vocabulary-object-detection-on-lvis-v1-0)](https://paperswithcode.com/sota/open-vocabulary-object-detection-on-lvis-v1-0?p=detect-every-thing-with-few-examples) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/detect-every-thing-with-few-examples/open-vocabulary-object-detection-on-mscoco)](https://paperswithcode.com/sota/open-vocabulary-object-detection-on-mscoco?p=detect-every-thing-with-few-examples)  [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/detect-every-thing-with-few-examples/few-shot-object-detection-on-ms-coco-10-shot)](https://paperswithcode.com/sota/few-shot-object-detection-on-ms-coco-10-shot?p=detect-every-thing-with-few-examples)  [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/detect-every-thing-with-few-examples/few-shot-object-detection-on-ms-coco-30-shot)](https://paperswithcode.com/sota/few-shot-object-detection-on-ms-coco-30-shot?p=detect-every-thing-with-few-examples)   [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/detect-every-thing-with-few-examples/one-shot-object-detection-on-coco)](https://paperswithcode.com/sota/one-shot-object-detection-on-coco?p=detect-every-thing-with-few-examples)
-
-
-> Update: This paper is resubmitted from ICLR2024 to another conference. I improved this work's presentation in the new draft and simplified the implementation. I will update the code later. 
-
-
-We present DE-ViT, an open-set object detector in this repository.
-In contrast to the popular open-vocabulary approach, we follow the few-shot formulation to represent each category with few support images rather than language. Our results shows potential for using images as category representation. 
-DE-ViT establishes new state-of-the-art on open-vocabulary, few-shot, and one-shot object detection benchmark with COCO and LVIS.
+# Master Thesis
 
 ## Installation
 
 ```bash
-git clone https://github.com/mlzxy/devit.git
-conda create -n devit  python=3.9 
-conda activate devit
-pip install -r devit/requirements.txt
-pip install -e ./devit
+git clone https://github.com/stle1027/Masterarbeit.git
+python3 -m venv virtual_environment
+source virtual_environment/bin/activate
+pip install -r Masterarbeit/requirements.txt
+pip install -e ./Masterarbeit
 ```
 
 Next, check [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
@@ -35,8 +23,6 @@ Download datasets and checkpoints before running scripts.
 ```bash
 python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
 ```
-
-The notebook [demo/build_prototypes.ipynb](demo/build_prototypes.ipynb) builds prototypes for YCB objects using ViT-L/14 and our provided example images.
 
 ## Training 
 
@@ -91,7 +77,7 @@ This repository was built on top of [RegionCLIP](https://github.com/microsoft/Re
 
 
 ## Citation
-
+[Arxiv Paper](https://arxiv.org/abs/2309.12969)
 ```
 @misc{zhang2023detect,
       title={Detect Every Thing with Few Examples}, 
