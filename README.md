@@ -21,6 +21,7 @@ follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
 
 ## Create prototypes
 put support images in "demo/tools/images"
+```bash
 cd demo
 python3 ./create_prototypes.py
 ```
