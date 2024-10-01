@@ -39,6 +39,12 @@ cd demo
 python3 ./check_for_similar_prototypes.py
 ```
 
+## Interactive tools/part segmentation
+```bash
+cd demo
+python3 ./segmentTools.py
+```
+
 ## Create gt file for own images
 put test images in "demo/input/"
 ```bash
