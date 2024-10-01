@@ -20,7 +20,8 @@ python3 ./create_gt_with_sam.py
 follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
 
 ## Create prototypes
-put support images in "demo/tools/images"
+put support images in "demo/tools/images/{object_name}/"
+e.g. "demo/tools/images/drill/0.png"
 ```bash
 cd demo
 python3 ./create_prototypes.py
