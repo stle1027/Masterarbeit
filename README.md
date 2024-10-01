@@ -10,7 +10,7 @@ pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
 ## Create gt file for own images
-put test images in "demo/input"
+put test images in "demo/input/"
 ```bash
 cd demo
 python3 ./create_gt_with_sam.py
