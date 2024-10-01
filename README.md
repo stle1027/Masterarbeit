@@ -9,17 +9,7 @@ source virtual_environment/bin/activate
 pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
-## Create gt file for own images
-put test images in "demo/input/"
-```bash
-cd demo
-python3 ./create_gt_with_sam.py
-```
 
-## Create gt file for insdet images
-follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
-
-## Create prototypes
 put support images in "demo/tools/images/{object_name}/"
 
 e.g. "demo/tools/images/drill/0.png"
@@ -30,16 +20,35 @@ python3 ./create_prototypes.py
 
 ## Demo
 
+```bash
+cd demo
+python3 ./create_prototypes.py
+(select "all")
+cd ..
+python3 ./demo/demo.py
+```
+
 For creating prototypes, SAM is required:
       Load the SAM model from: https://github.com/facebookresearch/segment-anything
-
-put test images in "demo/input"
-put corresponding "gt_file.json" in folder "demo/"
-```bash
-python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
-```
 If models are missing, download the ones provided by DE-ViT:
 [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
+
+## Model Weakness Analysis
+```bash
+cd demo
+python3 ./check_for_similar_prototypes.py
+```
+
+## Create gt file for own images
+put test images in "demo/input/"
+```bash
+cd demo
+python3 ./create_gt_with_sam.py
+```
+
+## Create gt file for insdet images
+follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
+
 
 ## Training 
 
