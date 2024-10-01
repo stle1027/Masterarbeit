@@ -9,9 +9,6 @@ source virtual_environment/bin/activate
 pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
-
-Next, check [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
-
 ## Demo
 
 For creating prototypes, SAM is required:
@@ -20,6 +17,8 @@ For creating prototypes, SAM is required:
 ```bash
 python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
 ```
+If models are missing, see:
+[Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
 
 ## Training 
 
