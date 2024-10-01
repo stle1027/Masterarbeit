@@ -9,15 +9,6 @@ source virtual_environment/bin/activate
 pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
-
-put support images in "demo/tools/images/{object_name}/"
-
-e.g. "demo/tools/images/drill/0.png"
-```bash
-cd demo
-python3 ./create_prototypes.py
-```
-
 ## Demo
 
 ```bash
