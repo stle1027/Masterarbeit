@@ -9,11 +9,21 @@ source virtual_environment/bin/activate
 pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
+## Create gt file
+put test images in "demo/input"
+```bash
+cd demo
+python3 ./create_gt_with_sam.py
+```
+
+
 ## Demo
 
 For creating prototypes, SAM is required:
       Load the SAM model from: https://github.com/facebookresearch/segment-anything
 
+put test images in "demo/input"
+put corresponding "gt_file.json" in folder "demo/"
 ```bash
 python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
 ```
