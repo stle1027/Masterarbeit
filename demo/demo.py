@@ -209,19 +209,13 @@ def main(
         overlapping_mode=True,
         topk=1,
         threshold=0.5,
-        eval_output_file=None,
-        gt_file=None,
-        reevaluated_eval_output_file=None,
-        evaluate=False
+        eval_output_file='demo/output/detection_results.json',
+        gt_file="demo/gt_file.json",
+        reevaluated_eval_output_file='demo/output/reevaluated_detection_results.json',
     ):
     torch.cuda.empty_cache()
     assert osp.abspath(image_dir) != osp.abspath(output_dir)
     os.makedirs(output_dir, exist_ok=True)
-
-    if evaluate:
-        eval_output_file='demo/output/detection_results.json'
-        gt_file='demo/filtered_output_2.json'
-        reevaluated_eval_output_file='demo/output/reevaluated_detection_results.json'
 
     with open(gt_file, 'r') as f:
         gt_data = json.load(f)

@@ -35,7 +35,7 @@ class SegmentTool:
 
     def read_images_from_folder(self):
         image_paths = []
-        folder_path = "images_instance_det"
+        folder_path = "input"
         for filename in os.listdir(folder_path):
             if filename.endswith(".jpg") or filename.endswith(".png"):
                 image_path = os.path.join(folder_path, filename)
@@ -63,7 +63,7 @@ class SegmentTool:
                 plt.show()
                 object_name = input("Specify the object name to segment (or type 'next' to go to the next image): ")
                 plt.close()
-                if object_name.lower() == 'n':
+                if object_name.lower() == 'next':
                     break
 
                 mask_selected = False
@@ -139,7 +139,7 @@ class SegmentTool:
                                     "category_id": object_name,
                                     "bbox": bbox,
                                     "area": int((x2 - x1) * (y2 - y1)),
-                                    "segmentation": [], # Segmentation mask can be added if needed
+                                    "segmentation": [],
                                     "iscrowd": 0
                                 })
                                 annotation_id += 1
@@ -179,7 +179,7 @@ class SegmentTool:
             category_id = next(item["id"] for item in coco_format["categories"] if item["name"] == category_name)
             annotation["category_id"] = category_id
 
-        with open('images_instance_det_gt_annotations.json', 'w') as f:
+        with open('gt_file.json', 'w') as f:
             json.dump(coco_format, f, indent=4)
 
 def main():     
