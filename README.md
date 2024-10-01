@@ -19,6 +19,12 @@ python3 ./create_gt_with_sam.py
 ## Create gt file for insdet images
 follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
 
+## Create prototypes
+put support images in "demo/tools/images"
+cd demo
+python3 ./create_prototypes.py
+```
+
 ## Demo
 
 For creating prototypes, SAM is required:
