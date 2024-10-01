@@ -14,8 +14,6 @@ Next, check [Downloads.md](Downloads.md) for instructions to setup datasets and 
 
 ## Demo
 
-![](demo/output/ycb.out.jpg)
-
 ```bash
 python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
 ```
