@@ -115,10 +115,16 @@ class ImageProcessor():
             r = model.get_intermediate_layers(nimage14.to(self.device),
                                     return_class_token=True, reshape=True)
             patch_tokens = r[0][0][0].cpu()
-            
-            mask14 = tvF.resize(mask_transformed, (mask_h, mask_w))
-            avg_patch_token = (mask14 * patch_tokens).flatten(1).sum(1) / mask14.sum()
-            
+
+            new_mask_h, new_mask_w = mask_transformed.shape[1] // 14, mask_transformed.shape[2] // 14
+            new_mask = torch.zeros((new_mask_h, new_mask_w))
+
+            for i in range(new_mask_h):
+                    for j in range(new_mask_w):
+                        patch = mask_transformed[:, i*14:(i+1)*14, j*14:(j+1)*14]
+                        new_mask[i, j] = patch.sum().float() / (14 * 14)
+                        
+            avg_patch_token = (new_mask * patch_tokens).flatten(1).sum(1) / new_mask.sum()
             
             class2tokens_original.append(avg_patch_token)
             if self.color_relevant:

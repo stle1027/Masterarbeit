@@ -24,9 +24,6 @@ import torchvision.ops as ops
 from torchvision.ops import box_area, box_iou
 import random
 
-import collections
-import math
-import pathlib
 import warnings
 from itertools import repeat
 from types import FunctionType
@@ -212,13 +209,19 @@ def main(
         overlapping_mode=True,
         topk=1,
         threshold=0.5,
-        eval_output_file='demo/output/detection_results.json',
-        gt_file='demo/filtered_output_2.json',
-        reevaluated_eval_output_file='demo/output/reevaluated_detection_results.json',
+        eval_output_file=None,
+        gt_file=None,
+        reevaluated_eval_output_file=None,
+        evaluate=False
     ):
     torch.cuda.empty_cache()
     assert osp.abspath(image_dir) != osp.abspath(output_dir)
     os.makedirs(output_dir, exist_ok=True)
+
+    if evaluate:
+        eval_output_file='demo/output/detection_results.json'
+        gt_file='demo/filtered_output_2.json'
+        reevaluated_eval_output_file='demo/output/reevaluated_detection_results.json'
 
     with open(gt_file, 'r') as f:
         gt_data = json.load(f)
@@ -250,8 +253,6 @@ def main(
     dinov2_model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14')
     dinov2_model = dinov2_model.to("cuda")
 
-    image_names = []
-    all_bounding_boxes = []
     results = []
     reevaluated_results = []
 
@@ -288,7 +289,6 @@ def main(
             pred_classes = pred_classes[mask]
             scores = scores[mask]
             topk3 = topk3[mask]
-            areas = box_area(boxes)
             indexes = list(range(len(pred_classes)))
             for c in torch.unique(pred_classes).tolist():
                 box_id_indexes = (pred_classes == c).nonzero().flatten().tolist()
@@ -319,7 +319,6 @@ def main(
         colors = assign_colors(pred_classes, label_names, seed=4)
         tensor_image = torch.from_numpy(image.copy()).permute(2, 0, 1)
         labels = [f"{label_names[cid]}: {scores[i]:.2f}" for i, cid in enumerate(pred_classes.tolist())]  # Include scores in labels
-        label_names_only = [label.split(":")[0] for label in labels]
         output = to_pil_image(draw_bounding_boxes(tensor_image, boxes, labels=labels, colors=colors))
         output.save(osp.join(output_dir, base_filename + '.out.jpg'))
 
@@ -334,8 +333,10 @@ def main(
 
         checker.update_features(dinov2_features)
         similarity_threshold = 0.6
+        start_time = time.time()
         result = checker.check_similarity(image,boxes,pred_classes,base_filename, similarity_threshold, topk3)
-
+        end_time = time.time()
+        print("Time required for re-evaluation: ", end_time-start_time)
         if len(result) > 0:
             filtered_boxes = torch.stack([torch.tensor(res['bounding_box']) for res in result])
         else:

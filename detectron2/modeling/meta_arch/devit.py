@@ -257,7 +257,6 @@ def focal_loss(inputs, targets, gamma=0.5, reduction="mean", bg_weight=0.2, num_
 def distance_embed(x, temperature = 10000, num_pos_feats = 128, scale=10.0):
     # x: [bs, n_dist]
     x = x[..., None]
-    #print(x.shape)
     scale = 2 * math.pi * scale
     dim_t = torch.arange(num_pos_feats)
     dim_t = temperature ** (2 * torch.div(dim_t, 2, rounding_mode="floor") / num_pos_feats)
@@ -342,10 +341,8 @@ class OpenSetDetectorWithExamples(nn.Module):
             images = [x[[2,1,0],:,:] for x in images]
         if self.offline_div_pixel:
             images = [((x / 255.0) - self.offline_pixel_mean) / self.offline_pixel_std for x in images]
-            print("B\n")
         else:
             images = [(x - self.offline_pixel_mean) / self.offline_pixel_std for x in images]
-        #print("IMAGES: ", images)
         images = ImageList.from_tensors(images, self.offline_backbone.size_divisibility)
         return images
 
@@ -758,7 +755,6 @@ class OpenSetDetectorWithExamples(nn.Module):
             vit_feat_name = f'res{cfg.DE.OUT_INDICES[-1]}'
         else:
             vit_feat_name = f'res{backbone.n_blocks - 1}'
-        print("oc\n ",offline_cfg)
         return {
             "backbone": backbone,
             "pixel_mean": cfg.MODEL.PIXEL_MEAN,
@@ -1008,7 +1004,6 @@ class OpenSetDetectorWithExamples(nn.Module):
             proposals, _ = self.offline_proposal_generator(images, features, None)
             # preprocess images for ViT
             images = self.preprocess_image(batched_inputs)
-            print(images.tensor.shape)
         
         with torch.no_grad():
             if self.backbone.training: self.backbone.eval()
