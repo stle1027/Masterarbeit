@@ -51,7 +51,7 @@ bash scripts/train_rpn.sh  ARG
 Check [Tools.md](Tools.md) for intructions to build prototype and prepare weights.
 
 ## Acknowledgement
-This master thesis is based on the code of DE-ViT:
+This master's thesis is based on the code of DE-ViT:
 
 [Arxiv Paper](https://arxiv.org/abs/2309.12969)
 ```
