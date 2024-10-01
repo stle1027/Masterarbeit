@@ -21,6 +21,7 @@ follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
 
 ## Create prototypes
 put support images in "demo/tools/images/{object_name}/"
+
 e.g. "demo/tools/images/drill/0.png"
 ```bash
 cd demo
