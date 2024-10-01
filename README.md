@@ -12,10 +12,6 @@ pip install -e ./Masterarbeit
 
 Next, check [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
 
-## Running Scripts
-
-Download datasets and checkpoints before running scripts.
-
 ## Demo
 
 ![](demo/output/ycb.out.jpg)
@@ -46,20 +42,6 @@ task=ovd dataset=lvis bash scripts/train.sh MODEL.MASK_ON True # train lvis with
 # how many gpus are used
 ```
 
-
-## Evaluation 
-
-All evaluations can be run without training, as long as the checkpoints are downloaded.
-
-The script-level environment variables are the same to training.
-
-```bash
-vit=l task=ovd dataset=coco bash scripts/eval.sh # evaluate COCO OVD with ViT-L/14
-
-vit=l task=ovd dataset=lvis bash scripts/eval.sh DE.TOPK 3  MODEL.MASK_ON True  # evaluate LVIS OVD with ViT-L/14
-```
-
-
 ## RPN Training (COCO)
 
 ```bash
@@ -71,12 +53,8 @@ bash scripts/train_rpn.sh  ARG
 Check [Tools.md](Tools.md) for intructions to build prototype and prepare weights.
 
 ## Acknowledgement
+This master thesis is based on the code of DE-ViT:
 
-
-This repository was built on top of [RegionCLIP](https://github.com/microsoft/RegionCLIP) and [DINOv2](https://github.com/facebookresearch/dinov2). We thank the effort from our community.
-
-
-## Citation
 [Arxiv Paper](https://arxiv.org/abs/2309.12969)
 ```
 @misc{zhang2023detect,
