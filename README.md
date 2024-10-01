@@ -9,13 +9,15 @@ source virtual_environment/bin/activate
 pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
-## Create gt file
+## Create gt file for own images
 put test images in "demo/input"
 ```bash
 cd demo
 python3 ./create_gt_with_sam.py
 ```
 
+## Create gt file for insdet images
+follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
 
 ## Demo
 
