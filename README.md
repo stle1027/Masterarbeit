@@ -14,6 +14,9 @@ Next, check [Downloads.md](Downloads.md) for instructions to setup datasets and 
 
 ## Demo
 
+For creating prototypes, SAM is required:
+      Load the SAM model from: https://github.com/facebookresearch/segment-anything
+
 ```bash
 python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
 ```
