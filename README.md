@@ -17,7 +17,7 @@ For creating prototypes, SAM is required:
 ```bash
 python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
 ```
-If models are missing, see:
+If models are missing, download the ones provided by DE-ViT:
 [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
 
 ## Training 
