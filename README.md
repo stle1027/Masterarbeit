@@ -9,20 +9,43 @@ source virtual_environment/bin/activate
 pip install -r Masterarbeit/requirements.txt
 pip install -e ./Masterarbeit
 ```
-
-Next, check [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
-
-## Running Scripts
-
-Download datasets and checkpoints before running scripts.
-
 ## Demo
 
-![](demo/output/ycb.out.jpg)
-
 ```bash
-python3 ./demo/demo.py # will generate demo/output/ycb.out.jpg
+cd demo
+python3 ./create_prototypes.py
+(select "all")
+cd ..
+python3 ./demo/demo.py
 ```
+
+For creating prototypes, SAM is required:
+      Load the SAM model from: https://github.com/facebookresearch/segment-anything
+If models are missing, download the ones provided by DE-ViT:
+[Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
+
+## Model Weakness Analysis
+```bash
+cd demo
+python3 ./check_for_similar_prototypes.py
+```
+
+## Interactive tools/part segmentation
+```bash
+cd demo
+python3 ./segmentTools.py
+```
+
+## Create gt file for own images
+put test images in "demo/input/"
+```bash
+cd demo
+python3 ./create_gt_with_sam.py
+```
+
+## Create gt file for insdet images
+follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
+
 
 ## Training 
 
@@ -46,20 +69,6 @@ task=ovd dataset=lvis bash scripts/train.sh MODEL.MASK_ON True # train lvis with
 # how many gpus are used
 ```
 
-
-## Evaluation 
-
-All evaluations can be run without training, as long as the checkpoints are downloaded.
-
-The script-level environment variables are the same to training.
-
-```bash
-vit=l task=ovd dataset=coco bash scripts/eval.sh # evaluate COCO OVD with ViT-L/14
-
-vit=l task=ovd dataset=lvis bash scripts/eval.sh DE.TOPK 3  MODEL.MASK_ON True  # evaluate LVIS OVD with ViT-L/14
-```
-
-
 ## RPN Training (COCO)
 
 ```bash
@@ -71,12 +80,8 @@ bash scripts/train_rpn.sh  ARG
 Check [Tools.md](Tools.md) for intructions to build prototype and prepare weights.
 
 ## Acknowledgement
+This master's thesis is based on the code of DE-ViT:
 
-
-This repository was built on top of [RegionCLIP](https://github.com/microsoft/RegionCLIP) and [DINOv2](https://github.com/facebookresearch/dinov2). We thank the effort from our community.
-
-
-## Citation
 [Arxiv Paper](https://arxiv.org/abs/2309.12969)
 ```
 @misc{zhang2023detect,
