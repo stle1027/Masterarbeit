@@ -24,6 +24,13 @@ For creating prototypes, SAM is required:
 If models are missing, download the ones provided by DE-ViT:
 [Downloads.md](Downloads.md) for instructions to setup datasets and model checkpoints.
 
+## Select part weights
+
+```bash
+cd demo
+python3 ./select_part_prototype_weights.py
+```
+
 ## Model Weakness Analysis
 ```bash
 cd demo
@@ -47,7 +54,7 @@ python3 ./create_gt_with_sam.py
 follow instructions in "demo/create_gt_for_insdet_dataset.ipynb"
 
 
-## Training 
+## Training (DE-ViT)
 
 ```bash
 vit=l task=ovd dataset=coco bash scripts/train.sh  # train open-vocabulary COCO with ViT-L
@@ -69,7 +76,7 @@ task=ovd dataset=lvis bash scripts/train.sh MODEL.MASK_ON True # train lvis with
 # how many gpus are used
 ```
 
-## RPN Training (COCO)
+## RPN Training (COCO) (DE-ViT)
 
 ```bash
 bash scripts/train_rpn.sh  ARG

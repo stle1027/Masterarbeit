@@ -10,7 +10,7 @@ datasets/coco
 datasets/lvis
 datasets/cifar-10-batches-py
 
-*.png
+
 *.json
 !vscode_launch.json
 !/detectron2/data/classnames/*.json
@@ -69,3 +69,4 @@ tensorboard
 /weights
 /datasets
 !demo/ycb_prototypes.pth
+!demo/tools
