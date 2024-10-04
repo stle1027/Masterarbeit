@@ -210,7 +210,7 @@ def main(
         topk=1,
         threshold=0.5,
         eval_output_file='demo/output/detection_results.json',
-        gt_file="demo/gt_file.json",
+        gt_file="demo/gt_annotations.json",
         reevaluated_eval_output_file='demo/output/reevaluated_detection_results.json',
     ):
     torch.cuda.empty_cache()

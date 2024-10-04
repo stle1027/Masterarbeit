@@ -2,8 +2,6 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 import cv2
-#import sys
-#sys.path.append("..")
 from segment_anything import sam_model_registry, SamPredictor
 from PIL import Image
 import os
@@ -21,6 +19,7 @@ class SegmentTool:
         self.side_name = side_name
 
     def show_mask(self, mask, ax, random_color=False):
+        """display the segmentation mask"""
         if random_color:
             color = np.concatenate([np.random.random(3), np.array([0.6])], axis=0)
         else:
@@ -30,17 +29,20 @@ class SegmentTool:
         ax.imshow(mask_image)
         
     def show_box(self, box, ax):
+        """display a bounding box around the object"""
         x0, y0 = box[0], box[1]
         w, h = box[2] - box[0], box[3] - box[1]
         ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor='green', facecolor=(0,0,0,0), lw=2))
 
     def show_points(self, coords, labels, ax, marker_size=375):
+        """display points on the image"""
         pos_points = coords[labels==1]
         neg_points = coords[labels==0]
         ax.scatter(pos_points[:, 0], pos_points[:, 1], color='green', marker='*', s=marker_size, edgecolor='white', linewidth=1.25)
         ax.scatter(neg_points[:, 0], neg_points[:, 1], color='red', marker='*', s=marker_size, edgecolor='white', linewidth=1.25) 
 
     def read_images_from_folder(self):
+        """read image files from a folder and return their paths"""
         image_paths = []
         folder_path = f"tools/images/{self.tool_name}"
         for filename in os.listdir(folder_path):
@@ -51,6 +53,7 @@ class SegmentTool:
         return image_paths
     
     def create_segmentation_masks(self):
+        """create segmentation masks for images"""
         sam = sam_model_registry[self.model_type](checkpoint=self.sam_checkpoint)
         sam.to(self.device)
         predictor = SamPredictor(sam)
@@ -121,25 +124,25 @@ class SegmentTool:
                     plt.title(f"Mask {i+1}, Score: {score:.3f}", fontsize=18)
                     plt.axis('on')
                     plt.show()
-                    user_input = input("mask good? (y/n)")
+                    user_input = input("Is the mask good? (y/n) ")
                     if user_input == "y":
                         binary_image = np.where(mask, 255, 0).astype(np.uint8)
                         pil_image = Image.fromarray(binary_image)
-                        pil_image.save(f"{segmentation_mask_folder}/{img_number}.mask.png")#.mask.png
-                        image = cv2.imread(f"{segmentation_mask_folder}/{img_number}.mask.png", cv2.IMREAD_UNCHANGED)#.mask.png
+                        pil_image.save(f"{segmentation_mask_folder}/{img_number}.mask.png")
+                        image = cv2.imread(f"{segmentation_mask_folder}/{img_number}.mask.png", cv2.IMREAD_UNCHANGED)
                         image[image > 50] = 255
-                        cv2.imwrite(f"{segmentation_mask_folder}/{img_number}.mask.png", image)#.mask.png
+                        cv2.imwrite(f"{segmentation_mask_folder}/{img_number}.mask.png", image)
                         mask_selected = True
                         break
 
 def main():     
-        tool_name = str(input("What is the tool name?"))
-        segmentation_type = str(input("Segment 'complete' or 'part' from object?"))
+        tool_name = str(input("What is the tool name? "))
+        segmentation_type = str(input("Segment 'complete' or 'part' from object? "))
         part_name = None
         side_name = None
         if(segmentation_type == "part"):
-            side_name = input("What is the side name?")
-            part_name = input("What is the part name?")
+            side_name = input("What is the side name? ")
+            part_name = input("What is the part name? ")
         segmentate_images = SegmentTool(segmentation_type=segmentation_type,tool_name=tool_name,part=part_name, side_name=side_name)
         segmentate_images.create_segmentation_masks()
 

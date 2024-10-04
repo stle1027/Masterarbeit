@@ -22,7 +22,7 @@ class PartSimilarityChecker:
         self.max_cosine_similarity_threshold = 0.40
 
     def _load_all_prototypes(self, part_prototype_dir):
-        # Load all part prototypes
+        """load all local prototypes"""
         part_prototypes = {}
         for label_name in self.label_names:
             part_prototypes[label_name] = {}
@@ -31,14 +31,14 @@ class PartSimilarityChecker:
                 for file_name in os.listdir(label_dir):
                     if file_name.endswith('.pth'):
                         side = file_name.replace('.pth', '').replace(f"{label_name}_", "")
-                        # Load the part prototype for the corresponding label and side
+                        # Load the local prototype for the corresponding label and side
                         part_prototypes[label_name][side] = torch.load(osp.join(label_dir, file_name), map_location=self.device)
             else:
                 part_prototypes[label_name] = None
         return part_prototypes
     
     def _load_all_part_weights(self):
-        # Load all part weights
+        """loads part weights for each local prototype (if available)."""
         weights = {}
         weights_dir = 'demo/prototypes/parts/weights'
         if osp.exists(weights_dir):
@@ -61,15 +61,15 @@ class PartSimilarityChecker:
         return weights
 
     def update_features(self, dinov2_features):
-        # Update ViT features
+        """update ViT features"""
         self.dinov2_features = dinov2_features
     
     def calculate_cosine_similarity_map(self, cropped_feature_map, prototype_value):
-        # Calculate cosine similarity map between the image description matrix and a prototype
+        """Calculate cosine similarity map between the image description matrix and a prototype"""
         # reshape the cropped image description matrix
         reshaped_cropped_feature_map = cropped_feature_map.reshape(768, -1)
         
-        # normalize the cropped image description matrix and 
+        # normalize the cropped image description matrix and prototype
         normalized_feature_map = F.normalize(reshaped_cropped_feature_map, dim=0)
         normalized_prototype = F.normalize(prototype_value, dim=0)
 
@@ -81,7 +81,7 @@ class PartSimilarityChecker:
         return cosine_similarities
     
     def visualize_cosine_similarity_map(self, cosine_similarities, label_name, base_filename, save_plot, counter, part_name, width_max_value, height_max_value, max_cos_sim):
-        # Plot the cosine similarity as an image
+        """Plot the cosine similarity as an image"""
         plt.figure(figsize=(10, 8))
         plt.imshow(cosine_similarities.to("cpu").numpy(), cmap='viridis', vmin=0, vmax=1)
         plt.colorbar(label='Cosine Similarity')
@@ -100,6 +100,7 @@ class PartSimilarityChecker:
         return counter + 1 
     
     def visualize_highest_similarity_in_original_image(self, image, x_original, y_original):
+        """visualizes the location with the highest similarity on the original image."""
         plt.figure(figsize=(10, 10))
         plt.imshow(image)
         # hide axes for a cleaner view
@@ -108,6 +109,7 @@ class PartSimilarityChecker:
         plt.show()
 
     def check_similarity(self, image, boxes, pred_classes, base_filename, similarity_threshold, topk3):
+        """checks part similarity between bounding box patches and prototypes."""
         # check if ViT features are being updated
         if self.dinov2_features is None:
             raise ValueError("ViT are not set. Please update features using `update_features` method.")

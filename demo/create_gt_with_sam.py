@@ -14,6 +14,7 @@ class SegmentTool:
         self.gt_annotations = []
 
     def show_mask(self, mask, ax, random_color=False):
+        """display the segmentation mask on the image"""
         if random_color:
             color = np.concatenate([np.random.random(3), np.array([0.6])], axis=0)
         else:
@@ -23,17 +24,20 @@ class SegmentTool:
         ax.imshow(mask_image)
         
     def show_box(self, box, ax):
+        """display bounding boxes on the image"""
         x0, y0 = box[0], box[1]
         w, h = box[2] - box[0], box[3] - box[1]
         ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor='green', facecolor=(0,0,0,0), lw=2))
 
     def show_points(self, coords, labels, ax, marker_size=375):
+        """display points for segmentation on the image"""
         pos_points = coords[labels==1]
         neg_points = coords[labels==0]
         ax.scatter(pos_points[:, 0], pos_points[:, 1], color='green', marker='*', s=marker_size, edgecolor='white', linewidth=1.25)
         ax.scatter(neg_points[:, 0], neg_points[:, 1], color='red', marker='*', s=marker_size, edgecolor='white', linewidth=1.25) 
 
     def read_images_from_folder(self):
+        """reads all images from the 'input' folder"""
         image_paths = []
         folder_path = "input"
         for filename in os.listdir(folder_path):
@@ -44,6 +48,7 @@ class SegmentTool:
         return image_paths
     
     def create_segmentation_masks(self):
+        """creates segmentation masks for the images"""
         sam = sam_model_registry[self.model_type](checkpoint=self.sam_checkpoint)
         sam.to(self.device)
         predictor = SamPredictor(sam)
@@ -149,6 +154,7 @@ class SegmentTool:
         self.save_gt_annotations()
 
     def save_gt_annotations(self):
+        """saves the ground truth annotations in COCO format"""
         coco_format = {
             "images": [],
             "annotations": self.gt_annotations,

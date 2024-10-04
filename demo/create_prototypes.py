@@ -94,6 +94,7 @@ class ImageProcessor():
         return centroid
 
     def calculatePrototypes(self):
+        """calculate and save global/local prototypes"""
         folder_path = self.getFolder()
         num_images = self.count_files_in_folder(folder_path)
         model = self.model.to(self.device)
@@ -118,7 +119,7 @@ class ImageProcessor():
 
             new_mask_h, new_mask_w = mask_transformed.shape[1] // 14, mask_transformed.shape[2] // 14
             new_mask = torch.zeros((new_mask_h, new_mask_w))
-
+            #get new weighted mask based on amount of object/part pixels in patch
             for i in range(new_mask_h):
                     for j in range(new_mask_w):
                         patch = mask_transformed[:, i*14:(i+1)*14, j*14:(j+1)*14]
@@ -135,15 +136,10 @@ class ImageProcessor():
                         
                         # Get the color of the corresponding pixel in the original image
                         center_pixel_color = image[center_y, center_x]
-                        # Print or store the color
                         print(f"Color of the center pixel (center of mass) in the mask: {center_pixel_color}")
                         target_length = 768
-                        # Anzahl der benötigten Nullen
                         num_zeros = target_length - center_pixel_color.size(0)
-
-                        # Erstellen eines Tensors mit Nullen
                         zeros = torch.zeros(num_zeros, dtype=torch.uint8)
-                        # Original-Tensor mit Null-Tensor zusammenfügen
                         center_pixel_color = torch.cat((center_pixel_color, zeros))
                         center_pixel_color = center_pixel_color.unsqueeze(0)
                     else:
@@ -159,8 +155,9 @@ class ImageProcessor():
                     r = model.get_intermediate_layers(colored_nimage14.to(self.device),
                                         return_class_token=True, reshape=True,n=[0])
                     patch_tokens = r[0][0][0].cpu()
-                    avg_patch_token = (mask14 * patch_tokens).flatten(1).sum(1) / mask14.sum()
+                    avg_patch_token = (new_mask * patch_tokens).flatten(1).sum(1) / new_mask.sum()
                     class2tokens_colors[color_name].append(avg_patch_token)
+        # save the original prototypes and color-specific prototypes
         if self.color_relevant:
             avg_color_dict = {color: torch.mean(torch.stack(tensors), dim=0) for color, tensors in class2tokens_colors.items()}
         class2tokens_original = torch.stack(class2tokens_original).mean(dim=0)
@@ -193,17 +190,15 @@ class ImageProcessor():
             torch.save({'prototypes': center_pixel_color, 'label_names': label_name_color_value}, f"{folder_path_save}/{self.part_name}_color_value.pth")
 
     def process_all_tools_and_parts(self):
-        # Gehe alle Werkzeuge im Verzeichnis 'tools/images' durch
+        # process all tools in folder 'tools/images'
         for tool_folder in os.listdir(self.images_dir):
             tool_path = os.path.join(self.images_dir, tool_folder)
             if os.path.isdir(tool_path):
-                # Setze den Tool-Namen und Typ auf 'complete' für das ganze Werkzeug
                 self.tool_name = tool_folder
                 self.prototype_type = 'complete'
                 print(f"Processing complete tool prototype for: {tool_folder}")
                 self.calculatePrototypes()
 
-                # Gehe zu 'segmented_parts' und finde Teile
                 segmented_parts_tool_path = os.path.join(self.segmented_parts_dir, tool_folder)
                 if os.path.exists(segmented_parts_tool_path):
                     for side_folder in os.listdir(segmented_parts_tool_path):
@@ -245,7 +240,5 @@ def main():
     else:
         prototype_combiner.combine_part_prototypes()
     
-
-
 if __name__ == "__main__":
     main()
